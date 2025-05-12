@@ -1,13 +1,14 @@
 <?php
-require_once "config/database.php";
-require_once "model/Medicament.php";
+require_once 'config/database.php';
+$db = new Database();
+$pdo = $db->getConnection();
 
-$database = new Database();
-$db = $database->getConnection();
+// Testez une requête simple
+$result = $pdo->query("SHOW TABLES LIKE 'medicaments'")->fetch();
+var_dump($result); // Doit retourner la table "medicaments"
 
-$med = new Medicament($db);
-$resultats = $med->rechercher("para");
-
+// Testez la requête des médicaments
+$medicaments = $pdo->query("SELECT * FROM medicaments")->fetchAll(PDO::FETCH_ASSOC);
 echo "<pre>";
-print_r($resultats);
+print_r($medicaments); // Doit afficher vos 3 médicaments
 echo "</pre>";

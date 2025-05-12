@@ -485,12 +485,12 @@ session_start();
                 <div class="sidebar-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="http://localhost/Pharmacie/controller/ListesController.php" data-bs-toggle="collapse">
+                            <a class="nav-link active" href="#" data-bs-toggle="collapse">
                                 <i class="bi bi-speedometer2"></i> Tableau de bord
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="http://localhost/Pharmacie/controller/ListesController.php" id="showMedicaments">
+                            <a class="nav-link" href="#" id="showMedicaments">
                                 <i class="bi bi-capsule"></i> Médicaments
                             </a>
                         </li>
@@ -500,7 +500,8 @@ session_start();
                             </a>
                         </li>
                         <li class="nav-item">
-                            <form action="login.php" method="post">
+                            <form action="../controller/AuthController.php" method="post">
+                                <input type="hidden" name="action" value="logout">
                                 <button type="submit" class="nav-link btn btn-link">
                                     <i class="bi bi-box-arrow-right"></i> Déconnexion
                                 </button>
