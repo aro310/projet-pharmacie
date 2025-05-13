@@ -1,0 +1,39 @@
+[12-May-2025 18:29:23 Europe/Berlin] PHP Warning:  require_once(C:\xampp\htdocs\Pharmacie\controller../config/database.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php on line 3
+[12-May-2025 18:29:23 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\Pharmacie\controller../config/database.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php:3
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php on line 3
+[12-May-2025 18:29:23 Europe/Berlin] PHP Warning:  require_once(C:\xampp\htdocs\Pharmacie\controller../config/database.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php on line 3
+[12-May-2025 18:29:23 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\Pharmacie\controller../config/database.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php:3
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php on line 3
+[12-May-2025 18:29:24 Europe/Berlin] PHP Warning:  require_once(C:\xampp\htdocs\Pharmacie\controller../config/database.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php on line 3
+[12-May-2025 18:29:24 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\Pharmacie\controller../config/database.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php:3
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php on line 3
+[12-May-2025 18:29:36 Europe/Berlin] PHP Warning:  require_once(C:\xampp\htdocs\Pharmacie\controller../config/database.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php on line 3
+[12-May-2025 18:29:36 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\Pharmacie\controller../config/database.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php:3
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php on line 3
+[12-May-2025 18:29:37 Europe/Berlin] PHP Warning:  require_once(C:\xampp\htdocs\Pharmacie\controller../config/database.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php on line 3
+[12-May-2025 18:29:37 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\Pharmacie\controller../config/database.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php:3
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php on line 3
+[12-May-2025 18:29:37 Europe/Berlin] PHP Warning:  require_once(C:\xampp\htdocs\Pharmacie\controller../config/database.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php on line 3
+[12-May-2025 18:29:37 Europe/Berlin] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\Pharmacie\controller../config/database.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php:3
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\Pharmacie\controller\DetailMedicamentController.php on line 3
+[12-May-2025 20:14:48 Europe/Berlin] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in C:\xampp\htdocs\Pharmacie\view\medocs.php on line 2
+[13-May-2025 15:00:31 Europe/Berlin] Le nom est obligatoire
+[13-May-2025 15:02:50 Europe/Berlin] Le nom est obligatoire
+[13-May-2025 15:02:55 Europe/Berlin] Le nom est obligatoire
+[13-May-2025 15:03:03 Europe/Berlin] Le nom est obligatoire
+[13-May-2025 15:08:37 Europe/Berlin] PHP Warning:  Undefined variable $id in C:\xampp\htdocs\Pharmacie\view\medocs.php on line 254
+[13-May-2025 15:08:37 Europe/Berlin] PHP Warning:  Undefined variable $id in C:\xampp\htdocs\Pharmacie\view\medocs.php on line 254
+[13-May-2025 15:08:37 Europe/Berlin] PHP Warning:  Undefined variable $id in C:\xampp\htdocs\Pharmacie\view\medocs.php on line 254
+[13-May-2025 15:08:37 Europe/Berlin] PHP Warning:  Undefined variable $id in C:\xampp\htdocs\Pharmacie\view\medocs.php on line 254

@@ -250,9 +250,12 @@
                                 <td><?php echo htmlspecialchars($medicament['nom'] ?? ''); ?></td>
                                 <td><?php echo htmlspecialchars($medicament['description'] ?? ''); ?></td>
                                 <td>
-                                    <button class="btn-neon btn-sm">
-                                        <i class="bi bi-pencil-square"></i> Modifier
+                                <form action="DetailMedicamentController.php" method="get">
+                                    <input type="hidden" name="id" value="<?= htmlspecialchars($medicament['id']) ?>">
+                                    <button type="submit" class="btn-neon btn-sm">
+                                        <i class="bi bi-pencil-square"></i> Détail
                                     </button>
+                                </form>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -266,12 +269,14 @@
         </div>
         
         <div class="action-buttons">
-            <button class="btn-neon">
-                <i class="bi bi-plus-circle"></i> Ajouter un médicament
-            </button>
+            <form action="../view/add_medicament.php" method="post">
+                <button class="btn-neon">
+                    <i class="bi bi-plus-circle"></i> Ajouter un médicament
+                </button>
+            </form>
             <form action="../view/index.php" method="post">
                 <button class="btn-neon">
-                    <i class="bi bi-printer"></i> Imprimer la liste
+                    <i class="bi bi-speedometer2"></i> Dashboard
                 </button>
             </form>
         </div>

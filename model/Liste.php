@@ -13,6 +13,19 @@ class Liste {
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
+    public function addMedicament($nom, $description) {
+        try {
+            $query = "INSERT INTO medicaments (nom, description) VALUES (:nom, :description)";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':nom', $nom);
+            $stmt->bindParam(':description', $description);
+            return $stmt->execute();
+        } catch(PDOException $e) {
+            die("Erreur d'insertion: " . $e->getMessage());
+        }
+    }
+    
+
     public function getAllMedicaments() {
         try {
             $query = "SELECT * FROM medicaments"; 
@@ -28,6 +41,14 @@ class Liste {
         } catch(PDOException $e) {
             throw new Exception("Erreur de base de données: " . $e->getMessage());
         }
+    }
+
+    public function getMedicamentById($id) {
+        $query = "SELECT * FROM medicaments WHERE id = :id LIMIT 1";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC); // Retourne false si aucun résultat
     }
 }
 ?>

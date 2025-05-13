@@ -13,3 +13,5 @@ class Medicament {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
+
+    

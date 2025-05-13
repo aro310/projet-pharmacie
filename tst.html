@@ -1,746 +1,621 @@
-<?php
-session_start();
-/*if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
-    exit;
-}*/
-?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Tableau de bord - Pharmacie</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails Médicament #<?= $medicament['id'] ?> | PharmaNeon</title>
+    
+    <!-- Framework Bootstrap 5 (CSS + Icônes) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
     <style>
         :root {
-            --primary-color: #3399ff; /* bleu néon */
-            --secondary-color: #6c757d;
-            --hover-color: rgba(51, 153, 255, 0.1);
-            --sidebar-bg: rgba(0, 0, 0, 0.8);
-            --sidebar-width: 250px;
-            --transition-speed: 0.3s;
-            --neon-pink: #ff66cc;
-            --neon-yellow: #ffcc00;
-            --neon-green: #66ff66;
-            --neon-purple: #9966cc;
-            --neon-orange: #ff9966;
-            --bg-dark: #111;
-            --text-light: #fff;
-            --text-dark: #333;
-            --card-bg: rgba(0, 0, 0, 0.7);
+            --pharma-blue: #3399ff;
+            --pharma-green: #00ff99;
+            --pharma-purple: #9966cc;
+            --bg-dark: #0a0a1a;
+            --text-light: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.7);
+            --transition-speed: 0.4s;
+            --neon-glow: 0 0 10px var(--pharma-blue), 0 0 20px var(--pharma-green);
         }
-
+        
         body {
-            background: radial-gradient(var(--bg-dark) 40%, #000 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
-            color: var(--text-light);
             min-height: 100vh;
+            background: radial-gradient(ellipse at bottom, var(--bg-dark) 0%, #000000 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-light);
+            overflow-x: hidden;
+            position: relative;
+            padding: 0;
+            margin: 0;
         }
 
-        /* Effets de pluie néon */
-        .raindrops {
+        /* Effet de pluie avancé */
+        .rain-container {
             position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .rain-drop {
+            position: absolute;
+            width: 2px;
+            height: 60px;
+            background: linear-gradient(to bottom, transparent, var(--pharma-blue));
+            animation: rainFall linear infinite;
+            opacity: 0;
+            transform-origin: top;
+        }
+
+        .splash {
+            position: absolute;
+            width: 15px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--pharma-blue);
+            opacity: 0;
+            animation: splashEffect 0.5s ease-out forwards;
+        }
+
+        @keyframes rainFall {
+            0% {
+                opacity: 0;
+                transform: translateY(-100px) rotateZ(0deg);
+            }
+            10% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 0.8;
+                transform: translateY(100vh) rotateZ(5deg);
+            }
+        }
+
+        @keyframes splashEffect {
+            0% {
+                opacity: 0;
+                transform: scale(0.1);
+            }
+            80% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1.5);
+            }
+        }
+
+        /* Conteneur principal */
+        .medication-container {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 20px;
+            perspective: 1000px;
+        }
+
+        /* Carte de médicament */
+        .medication-card {
+            background: rgba(10, 10, 30, 0.85);
+            border-radius: 20px;
+            border: 1px solid var(--pharma-blue);
+            box-shadow: var(--neon-glow);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: cardAppear 1s ease-out forwards;
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(50px) rotateX(15deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0);
+            }
+        }
+
+        .medication-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 0 30px var(--pharma-blue), 0 0 50px var(--pharma-purple);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, rgba(51, 153, 255, 0.2), rgba(0, 255, 153, 0.1));
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--pharma-blue);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0.1),
+                rgba(255, 255, 255, 0)
+            );
+            transform: rotate(30deg);
+            animation: shine 6s infinite;
+        }
+
+        @keyframes shine {
+            0%, 100% {
+                left: -50%;
+            }
+            50% {
+                left: 150%;
+            }
+        }
+
+        .card-header h2 {
+            color: var(--pharma-green);
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
+            margin: 0;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-header h2 i {
+            font-size: 1.8rem;
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(51, 153, 255, 0.2);
+            padding-bottom: 1rem;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .detail-row:hover {
+            border-bottom-color: var(--pharma-blue);
+        }
+
+        .detail-label {
+            flex: 0 0 200px;
+            font-weight: 600;
+            color: var(--pharma-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-value {
+            flex: 1;
+            color: var(--text-light);
+            padding-left: 1rem;
+            border-left: 1px solid rgba(51, 153, 255, 0.2);
+            animation: textGlow 3s infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from {
+                text-shadow: none;
+            }
+            to {
+                text-shadow: 0 0 5px var(--pharma-blue);
+            }
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-neon {
+            background: linear-gradient(135deg, var(--pharma-blue), var(--pharma-purple));
+            border: none;
+            color: var(--bg-dark);
+            font-weight: 600;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(51, 153, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            z-index: 1;
+        }
+
+        .btn-neon::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
+            background: linear-gradient(135deg, var(--pharma-purple), var(--pharma-blue));
+            opacity: 0;
+            transition: opacity var(--transition-speed) ease;
             z-index: -1;
         }
 
-        .raindrop {
-            position: absolute;
-            width: 2px;
-            height: 20px;
-            background: var(--primary-color);
-            box-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color);
-            animation: fall linear infinite;
-            opacity: 0.6;
-        }
-
-        @keyframes fall {
-            to {
-                transform: translateY(100vh);
-            }
-        }
-
-        /* Sidebar néon */
-        .sidebar {
-            min-height: 100vh;
-            width: var(--sidebar-width);
-            background: var(--sidebar-bg);
-            backdrop-filter: blur(5px);
-            position: fixed;
-            z-index: 1000;
-            transform: translateX(0);
-            transition: transform var(--transition-speed) ease-in-out;
-            border-right: 1px solid rgba(51, 153, 255, 0.3);
-            box-shadow: 0 0 20px rgba(51, 153, 255, 0.2);
-        }
-
-        .sidebar.collapsed {
-            transform: translateX(calc(var(--sidebar-width) * -1));
-        }
-
-        .sidebar .nav-link {
+        .btn-neon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(102, 51, 204, 0.8);
             color: var(--text-light);
-            border-radius: 8px;
-            margin: 0.25rem 1rem;
-            padding: 0.75rem 1rem;
-            transition: all var(--transition-speed) ease;
-            position: relative;
-            overflow: hidden;
-            font-weight: 500;
-            letter-spacing: 0.5px;
         }
 
-        .sidebar .nav-link::before {
-            content: '';
+        .btn-neon:hover::before {
+            opacity: 1;
+        }
+
+        .btn-neon i {
+            font-size: 1.2rem;
+        }
+
+        /* Effet de particules */
+        .particles {
             position: absolute;
-            top: 0;
-            left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(51, 153, 255, 0.3), transparent);
-            transition: all 0.6s ease;
-        }
-
-        .sidebar .nav-link:hover::before {
-            left: 100%;
-        }
-
-        .sidebar .nav-link:hover, 
-        .sidebar .nav-link.active {
-            background-color: var(--hover-color);
-            color: var(--primary-color);
-            transform: translateX(5px);
-            box-shadow: 0 0 15px rgba(51, 153, 255, 0.3);
-        }
-
-        .sidebar .nav-link i {
-            margin-right: 10px;
-            transition: all var(--transition-speed) ease;
-        }
-
-        .sidebar .nav-link:hover i, 
-        .sidebar .nav-link.active i {
-            transform: scale(1.2);
-            color: var(--primary-color);
-        }
-
-        /* Contenu principal */
-        main {
-            margin-left: var(--sidebar-width);
-            transition: margin-left var(--transition-speed) ease;
-            padding: 20px;
-            background: transparent;
-        }
-
-        main.collapsed {
-            margin-left: 0;
-        }
-
-        /* Carte de recherche */
-        .search-container {
-            max-width: 700px;
-            margin: 2rem auto;
-            padding: 2.5rem;
-            background: var(--card-bg);
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(51, 153, 255, 0.2);
-            transform: translateY(0);
-            transition: all 0.4s ease;
-            animation: float 6s ease-in-out infinite;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(51, 153, 255, 0.3);
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        .search-container:hover {
-            box-shadow: 0 0 30px rgba(51, 153, 255, 0.4);
-        }
-
-        .search-header {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-
-        .search-header h2 {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            animation: fadeInDown 0.8s ease;
-            text-shadow: 0 0 10px rgba(51, 153, 255, 0.5);
-        }
-
-        .search-header p {
-            animation: fadeIn 1s ease 0.3s both;
-            color: #aaa;
-        }
-
-        /* Champ de recherche */
-        #searchDashboard {
-            padding: 15px 25px;
-            border-radius: 50px;
-            border: 2px solid rgba(51, 153, 255, 0.3);
-            transition: all 0.4s ease;
-            background-color: rgba(0, 0, 0, 0.5);
-            font-size: 1rem;
-            color: var(--text-light);
-        }
-
-        #searchDashboard:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 15px rgba(51, 153, 255, 0.4);
-            background-color: rgba(0, 0, 0, 0.7);
-            transform: scale(1.02);
-            color: var(--text-light);
-        }
-
-        #searchDashboard::placeholder {
-            color: #aaa;
-        }
-
-        /* Liste des médicaments */
-        #medicamentsList {
-            max-height: 400px;
-            overflow-y: auto;
-            margin-top: 1rem;
-            border-radius: 12px;
-            border: 1px solid rgba(51, 153, 255, 0.2);
-            animation: fadeIn 0.5s ease;
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .list-group-item {
-            opacity: 0;
-            animation: fadeInUp 0.5s ease forwards;
-            animation-delay: calc(var(--animation-order) * 0.1s);
-            background: transparent;
-            border: 1px solid rgba(51, 153, 255, 0.1);
-            margin-bottom: 5px;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .clickable-item {
-            cursor: pointer;
-            transition: all 0.3s ease;
-            padding: 15px 20px;
-            border-left: 4px solid transparent;
-            margin-bottom: 5px;
-            border-radius: 8px;
-        }
-
-        .clickable-item:hover {
-            background-color: rgba(51, 153, 255, 0.1);
-            border-left-color: var(--primary-color);
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .med-name {
-            font-weight: 600;
-            color: var(--primary-color);
-            transition: all 0.3s ease;
-        }
-
-        .clickable-item:hover .med-name {
-            color: var(--neon-yellow);
-            text-shadow: 0 0 5px rgba(255, 204, 0, 0.3);
-        }
-
-        .med-desc {
-            font-size: 0.9rem;
-            color: #aaa;
-            transition: all 0.3s ease;
-        }
-
-        .clickable-item:hover .med-desc {
-            color: #ddd;
-        }
-
-        .no-results {
-            color: #aaa;
-            text-align: center;
-            padding: 2rem;
-            animation: fadeIn 0.5s ease;
-        }
-
-        /* Barre de défilement */
-        #medicamentsList::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #medicamentsList::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-        }
-
-        #medicamentsList::-webkit-scrollbar-thumb {
-            background-color: var(--primary-color);
-            border-radius: 10px;
-            background-image: linear-gradient(to bottom, #3399ff, #66b3ff);
-        }
-
-        /* Modal */
-        .modal-content {
-            background-color: var(--card-bg);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(51, 153, 255, 0.3);
-            color: var(--text-light);
-        }
-
-        .modal-header {
-            border-bottom: 1px solid rgba(51, 153, 255, 0.3);
-        }
-
-        .modal-footer {
-            border-top: 1px solid rgba(51, 153, 255, 0.3);
-        }
-
-        .btn-close {
-            filter: invert(1);
-        }
-
-        .form-control {
-            background-color: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(51, 153, 255, 0.3);
-            color: var(--text-light);
-        }
-
-        .form-control:focus {
-            background-color: rgba(0, 0, 0, 0.7);
-            border-color: var(--primary-color);
-            box-shadow: 0 0 10px rgba(51, 153, 255, 0.3);
-            color: var(--text-light);
-        }
-
-        /* Boutons */
-        .btn {
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            border: none;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, var(--primary-color), #66b3ff);
-            box-shadow: 0 0 15px rgba(51, 153, 255, 0.3);
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(45deg, #66b3ff, var(--primary-color));
-            box-shadow: 0 0 20px rgba(51, 153, 255, 0.5);
-        }
-
-        .btn-outline-secondary {
-            color: var(--text-light);
-            border-color: rgba(51, 153, 255, 0.3);
-        }
-
-        .btn-outline-secondary:hover {
-            background: rgba(51, 153, 255, 0.1);
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        /* Animation pulse */
-        #addMedicament {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(51, 153, 255, 0.4);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(51, 153, 255, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(51, 153, 255, 0);
-            }
-        }
-
-        /* Titre */
-        .h2 {
-            color: var(--text-light);
-            text-shadow: 0 0 10px rgba(51, 153, 255, 0.5);
-        }
-
-        /* Bouton de basculement de la sidebar */
-        .sidebar-toggle {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1100;
-            background: var(--pharma-blue);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            opacity: 0;
+            top: 0;
+            left: 0;
+            z-index: 5;
             pointer-events: none;
         }
 
-        .sidebar-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(51, 153, 255, 0.8);
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--pharma-green);
+            opacity: 0;
+            animation: floatParticle linear infinite;
         }
 
-        .sidebar-toggle.active {
-             left: calc(var(--sidebar-width) + 20px);
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(20px);
+                opacity: 0;
+            }
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease-in-out;
+            .detail-row {
+                flex-direction: column;
+                gap: 0.5rem;
             }
-            .sidebar.show {
-                transform: translateX(0);
+            
+            .detail-label {
+                flex: 1;
+                padding-bottom: 0.5rem;
+                border-bottom: 1px dashed rgba(51, 153, 255, 0.3);
             }
-            main {
-                margin-left: 0;
-                transition: margin-left 0.3s ease;
+            
+            .detail-value {
+                border-left: none;
+                padding-left: 0;
             }
-            .search-container {
-                padding: 1.5rem;
-                margin: 1rem;
-            }
-            .sidebar-toggle {
-                opacity: 1;
-                pointer-events: all;
+            
+            .action-buttons {
+                justify-content: center;
             }
         }
-
-        /* Animation pour les liens actifs */
-        .sidebar .nav-link.active {
-            position: relative;
-        }
-
-        .sidebar .nav-link.active::after {
-            content: '';
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 10px;
-            height: 10px;
-            background-color: var(--primary-color);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--primary-color);
-            transition: all var(--transition-speed) ease;
-        }
-
-        .sidebar .nav-link.collapsed::after {
-            transform: translateY(-50%) rotate(-90deg);
-        }
-    </style> 
+    </style>
 </head>
 <body>
-    <!-- Effet de pluie néon -->
-    <div class="raindrops" id="raindrops"></div>
+    <!-- Effet de pluie avancé -->
+    <div class="rain-container" id="rainContainer"></div>
+    
+    <!-- Effet de particules -->
+    <div class="particles" id="particles"></div>
 
-    <!-- Sidebar toggle button -->
-    <button class="sidebar-toggle animate__animated animate__fadeIn" id="sidebarToggle">
-        <i class="bi bi-list"></i>
-    </button>
-
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-2 d-none d-md-block sidebar animate__animated animate__fadeInLeft">
-                <div class="sidebar-sticky pt-3">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#" data-bs-toggle="collapse">
-                                <i class="bi bi-speedometer2"></i> Tableau de bord
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" id="showMedicaments">
-                                <i class="bi bi-capsule"></i> Médicaments
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="bi bi-people"></i> Clients
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <form action="../controller/AuthController.php" method="post">
-                                <input type="hidden" name="action" value="logout">
-                                <button type="submit" class="nav-link btn btn-link">
-                                    <i class="bi bi-box-arrow-right"></i> Déconnexion
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
-            <!-- Main content -->
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 animate__animated animate__fadeIn">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom border-neon">
-                    <h1 class="h2">Gestion de pharmacie</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group mr-2">
-                            <button class="btn btn-sm btn-outline-secondary" id="addMedicament">
-                                <i class="bi bi-plus"></i> Ajouter
-                            </button>
-                        </div>
+    <div class="medication-container">
+        <div class="medication-card animate__animated animate__fadeIn">
+            <div class="card-header">
+                <h2><i class="bi bi-capsule-pill"></i> Détails du médicament #<?= htmlspecialchars($medicament['id']) ?></h2>
+            </div>
+            
+            <div class="card-body">
+                <div class="detail-row">
+                    <div class="detail-label">
+                        <i class="bi bi-tag-fill"></i> Nom du médicament
+                    </div>
+                    <div class="detail-value" id="medName">
+                        <?= htmlspecialchars($medicament['nom']) ?>
                     </div>
                 </div>
-
-                <!-- Section recherche moderne -->
-                <div class="search-container">
-                    <div class="search-header">
-                        <h2><i class="bi bi-search-heart"></i> Recherche de médicaments</h2>
-                        <p class="text-muted">Trouvez vos médicaments en quelques lettres</p>
+                
+                <div class="detail-row">
+                    <div class="detail-label">
+                        <i class="bi bi-card-text"></i> Description
                     </div>
-                    
-                    <div class="position-relative">
-                        <input type="text" 
-                               id="searchDashboard" 
-                               class="form-control" 
-                               placeholder="Exemple: Doliprane, Aspirine..." 
-                               aria-label="Rechercher un médicament">
-                        <div id="medicamentsList" class="list-group"></div>
+                    <div class="detail-value" id="medDesc">
+                        <?= htmlspecialchars($medicament['description']) ?>
                     </div>
                 </div>
-
-                <!-- Modal pour ajouter/modifier un médicament -->
-                <div class="modal fade" id="medicamentModal" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalTitle">Ajouter un médicament</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="medicamentForm">
-                                    <input type="hidden" id="medId" name="id">
-                                    <input type="hidden" name="action" id="formAction" value="create">
-                                    
-                                    <div class="mb-3">
-                                        <label for="nom" class="form-label">Nom</label>
-                                        <input type="text" class="form-control" id="nom" name="nom" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="description" class="form-label">Description</label>
-                                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="prix" class="form-label">Prix (€)</label>
-                                            <input type="number" step="0.01" class="form-control" id="prix" name="prix" required>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="stock" class="form-label">Stock</label>
-                                            <input type="number" class="form-control" id="stock" name="stock" required>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                <button type="button" class="btn btn-primary" id="saveMedicament">Enregistrer</button>
-                            </div>
-                        </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">
+                        <i class="bi bi-calendar-check"></i> Date d'ajout
+                    </div>
+                    <div class="detail-value" id="medDate">
+                        <?= date('d/m/Y H:i', strtotime($medicament['date_creation'] ?? 'now')) ?>
                     </div>
                 </div>
-            </main>
+                
+                <div class="detail-row">
+                    <div class="detail-label">
+                        <i class="bi bi-upc-scan"></i> Code produit
+                    </div>
+                    <div class="detail-value" id="medCode">
+                        <?= htmlspecialchars($medicament['code'] ?? 'PH-' . str_pad($medicament['id'], 5, '0', STR_PAD_LEFT)) ?>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn-neon" id="editBtn">
+                        <i class="bi bi-pencil-square"></i> Modifier
+                    </button>
+                    <button class="btn-neon" id="printBtn">
+                        <i class="bi bi-printer"></i> Imprimer
+                    </button>
+                    <a href="ListesController.php" class="btn-neon" id="backBtn">
+                        <i class="bi bi-arrow-left"></i> Retour
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- Framework jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Framework Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- GSAP pour animations avancées -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    
     <script>
-    $(document).ready(function() {
-        // Créer des gouttes de pluie néon
-        const raindropsContainer = document.getElementById('raindrops');
-        for (let i = 0; i < 50; i++) {
-            const raindrop = document.createElement('div');
-            raindrop.classList.add('raindrop');
-            raindrop.style.left = Math.random() * 100 + 'vw';
-            raindrop.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
-            raindrop.style.animationDelay = (Math.random() * 2) + 's';
-            raindrop.style.opacity = Math.random() * 0.4 + 0.2;
-            raindrop.style.height = (Math.random() * 20 + 10) + 'px';
-            raindropsContainer.appendChild(raindrop);
-        }
-
-        // Gestion du sidebar
-        const sidebar = $('.sidebar');
-        const sidebarToggle = $('#sidebarToggle');
-        const mainContent = $('main');
-        
-        // Au clic sur le bouton hamburger
-        sidebarToggle.click(function(e) {
-            e.stopPropagation(); // Empêche la propagation du clic
-            toggleSidebar();
-        });
-        
-        // Fonction pour basculer le sidebar
-        function toggleSidebar() {
-            sidebar.toggleClass('show');
-            mainContent.toggleClass('collapsed');
-            sidebarToggle.find('i').toggleClass('bi-list bi-x');
-            
-            // Animation du bouton
-            if (sidebar.hasClass('show')) {
-                sidebarToggle.css('left', 'calc(var(--sidebar-width) + 20px)');
-            } else {
-                sidebarToggle.css('left', '20px');
-            }
-        }
-        
-        // Fermer le sidebar si on clique à l'extérieur (sur mobile)
-        $(document).click(function(e) {
-            if ($(window).width() <= 768) {
-                if (!$(e.target).closest('.sidebar').length && 
-                    !$(e.target).is('#sidebarToggle') && 
-                    sidebar.hasClass('show')) {
-                    toggleSidebar();
-                }
-            }
-        });
-
-        // Empêcher la fermeture quand on clique dans le sidebar
-        $('.sidebar').click(function(e) {
-            e.stopPropagation();
-        });
-
-        // Set animation delays for list items
-        function setAnimationOrder() {
-            $('.list-group-item').each(function(index) {
-                $(this).css('--animation-order', index);
-            });
-        }
-
-        // Toggle active links
-        $('.sidebar .nav-link[data-bs-toggle="collapse"]').click(function(e) {
-            e.preventDefault();
-            $(this).toggleClass('collapsed');
-        });
-
-        // Rechercher un médicament
-        $('#searchDashboard').on('input', function() {
-            const terme = $(this).val().trim();
-            if (terme.length > 0) {
-                $.get('../controller/MedicamentController.php', { search: terme }, function(data) {
-                    $('#medicamentsList').empty();
-                    if (data.length > 0) {
-                        data.forEach(med => {
-                            $('#medicamentsList').append(`
-                                <div class="clickable-item list-group-item">
-                                    <div class="med-name">${med.nom}</div>
-                                    <div class="med-desc">${med.description || 'Aucune description'}</div>
-                                    <div class="small text-muted mt-1">
-                                        Prix: ${med.prix} € - Stock: ${med.stock}
-                                    </div>
-                                </div>
-                            `);
-                        });
-                        setAnimationOrder();
-                    } else {
-                        $('#medicamentsList').html('<div class="no-results">Aucun médicament trouvé</div>');
-                    }
-                }, 'json');
-            } else {
-                $('#medicamentsList').empty();
-            }
-        });
-
-        // Ajouter un médicament
-        $('#addMedicament').click(function() {
-            $('#modalTitle').text('Ajouter un médicament');
-            $('#formAction').val('create');
-            $('#medicamentForm')[0].reset();
-            $('#medId').val('');
-            $('#medicamentModal').modal('show');
-        });
-
-        // Modifier
-        $(document).on('click', '.edit-med', function() {
-            const id = $(this).data('id');
-            $.get(`../controller/MedicamentController.php?id=${id}`, function(data) {
-                $('#modalTitle').text('Modifier le médicament');
-                $('#formAction').val('update');
-                $('#medId').val(data.id);
-                $('#nom').val(data.nom);
-                $('#description').val(data.description);
-                $('#prix').val(data.prix);
-                $('#stock').val(data.stock);
-                $('#medicamentModal').modal('show');
-            });
-        });
-
-        // Enregistrer
-        $('#saveMedicament').click(function() {
-            const formData = $('#medicamentForm').serialize();
-            $.post('../controller/MedicamentController.php', formData, function(response) {
-                if (response.success) {
-                    $('#medicamentModal').modal('hide');
-                    // Show success animation
-                    $('.search-container').addClass('animate__animated animate__tada');
+        $(document).ready(function() {
+            // Effet de pluie 
+            function createAdvancedRain() {
+                const container = $('#rainContainer');
+                const dropCount = 200;
+                
+                for (let i = 0; i < dropCount; i++) {
+                    const drop = $('<div class="rain-drop"></div>');
+                    const delay = Math.random() * 5;
+                    const duration = 1 + Math.random() * 2;
+                    const left = Math.random() * 100;
+                    const height = 30 + Math.random() * 50;
+                    const opacity = 0.3 + Math.random() * 0.5;
+                    
+                    drop.css({
+                        left: `${left}%`,
+                        height: `${height}px`,
+                        animationDelay: `${delay}s`,
+                        animationDuration: `${duration}s`,
+                        opacity: 0
+                    });
+                    
+                    // Animation GSAP pour un effet plus fluide
+                    gsap.to(drop, {
+                        opacity: opacity,
+                        duration: 0.5,
+                        delay: delay,
+                        ease: "power1.in"
+                    });
+                    
+                    // Créer des éclaboussures quand la goutte atteint le bas
                     setTimeout(() => {
-                        $('.search-container').removeClass('animate__animated animate__tada');
-                    }, 1000);
-                    $('#searchDashboard').trigger('input'); // Recharge les résultats
+                        if (Math.random() > 0.3) {
+                            createSplash(left);
+                        }
+                    }, (delay + duration) * 1000);
+                    
+                    container.append(drop);
+                    
+                    // Répéter l'animation
+                    setInterval(() => {
+                        gsap.to(drop, {
+                            opacity: 0,
+                            duration: 0.5,
+                            onComplete: () => {
+                                drop.css({
+                                    top: '-100px',
+                                    left: `${Math.random() * 100}%`
+                                });
+                                gsap.to(drop, {
+                                    opacity: opacity,
+                                    duration: 0.5
+                                });
+                                
+                                if (Math.random() > 0.3) {
+                                    setTimeout(() => {
+                                        createSplash(parseFloat(drop.css('left')));
+                                    }, duration * 1000);
+                                }
+                            }
+                        });
+                    }, (delay + duration) * 1000);
                 }
-            }, 'json');
-        });
-
-        // Supprimer
-        $(document).on('click', '.delete-med', function() {
-            if (confirm('Êtes-vous sûr de vouloir supprimer ce médicament ?')) {
-                const id = $(this).data('id');
-                $.post('../controller/MedicamentController.php', {
-                    action: 'delete',
-                    id: id
-                }, function(response) {
-                    if (response.success) {
-                        $('#searchDashboard').trigger('input');
-                    }
-                }, 'json');
             }
+            
+            function createSplash(leftPosition) {
+                const splash = $('<div class="splash"></div>');
+                splash.css({
+                    left: `${leftPosition}%`,
+                    bottom: '50px',
+                    opacity: 0
+                });
+                
+                $('#rainContainer').append(splash);
+                
+                // Animation GSAP pour l'éclaboussure
+                gsap.to(splash, {
+                    opacity: 0.6,
+                    scale: 1.5,
+                    duration: 0.3,
+                    ease: "power1.out",
+                    onComplete: () => {
+                        splash.remove();
+                    }
+                });
+            }
+            
+            // Effet de particules flottantes
+            function createFloatingParticles() {
+                const container = $('#particles');
+                const particleCount = 50;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = $('<div class="particle"></div>');
+                    const size = 2 + Math.random() * 4;
+                    const left = Math.random() * 100;
+                    const delay = Math.random() * 10;
+                    const duration = 10 + Math.random() * 20;
+                    const color = Math.random() > 0.7 ? 'var(--pharma-green)' : 
+                                 Math.random() > 0.5 ? 'var(--pharma-blue)' : 'var(--pharma-purple)';
+                    
+                    particle.css({
+                        left: `${left}%`,
+                        bottom: '-10px',
+                        width: `${size}px`,
+                        height: `${size}px`,
+                        background: color,
+                        animationDelay: `${delay}s`,
+                        animationDuration: `${duration}s`
+                    });
+                    
+                    container.append(particle);
+                    
+                    // Répéter l'animation
+                    setInterval(() => {
+                        particle.css({
+                            bottom: '-10px',
+                            left: `${Math.random() * 100}%`
+                        });
+                    }, (delay + duration) * 1000);
+                }
+            }
+            
+
+            
+            // Animation de texte avec décodage
+            function animateTextDecoding() {
+                const texts = {
+                    medName: "<?= htmlspecialchars($medicament['nom']) ?>",
+                    medDesc: "<?= htmlspecialchars($medicament['description']) ?>"
+                };
+                
+                $('#medName, #medDesc').each(function() {
+                    const element = $(this);
+                    const id = element.attr('id');
+                    const finalText = texts[id];
+                    let currentText = '';
+                    
+                    element.text('');
+                    
+                    // Effet de décodage aléatoire
+                    const interval = setInterval(() => {
+                        if (currentText.length < finalText.length) {
+                            // Ajouter un caractère aléatoire
+                            currentText += finalText[currentText.length];
+                            element.text(currentText);
+                            
+                            // Effet visuel
+                            gsap.to(element, {
+                                scale: 1.05,
+                                duration: 0.1,
+                                yoyo: true,
+                                repeat: 1,
+                                ease: "power1.inOut"
+                            });
+                        } else {
+                            clearInterval(interval);
+                        }
+                    }, 50);
+                });
+            }
+            
+            // Effet de clic sur les boutons
+            $('.btn-neon').on('click', function() {
+                gsap.to(this, {
+                    scale: 0.95,
+                    duration: 0.2,
+                    yoyo: true,
+                    repeat: 1,
+                    ease: "power1.inOut"
+                });
+                
+                // Effet de vague lumineuse
+                const ripple = $('<div class="btn-ripple"></div>');
+                $(this).append(ripple);
+                
+                gsap.to(ripple, {
+                    scale: 20,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: "power2.out",
+                    onComplete: () => ripple.remove()
+                });
+            });
+            
+            // Initialisation des effets
+            createAdvancedRain();
+            createFloatingParticles();
+            setupCardTilt();
+            animateTextDecoding();
+            
+            // Effet de parallaxe avec le défilement
+            $(window).on('scroll', function() {
+                const scrollPos = $(this).scrollTop();
+                $('.rain-drop').css('transform', `translateY(${scrollPos * 0.2}px)`);
+                $('.particle').css('transform', `translateY(${-scrollPos * 0.1}px)`);
+            });
         });
-    });
     </script>
 </body>
 </html>
-
