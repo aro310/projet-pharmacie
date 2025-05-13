@@ -9,35 +9,30 @@ class Liste {
 
     public function __construct($db) {
         $this->db = $db;
-        // Activez les exceptions PDO
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    public function addMedicament($nom, $description) {
+    public function addMedicament($nom, $description, $prix, $photoPath) {
         try {
-            $query = "INSERT INTO medicaments (nom, description) VALUES (:nom, :description)";
+            $query = "INSERT INTO medicaments (nom, description, prix, photo) VALUES (:nom, :description, :prix, :photo)";
             $stmt = $this->db->prepare($query);
             $stmt->bindParam(':nom', $nom);
             $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':prix', $prix, PDO::PARAM_INT);
+            $stmt->bindParam(':photo', $photoPath);
             return $stmt->execute();
         } catch(PDOException $e) {
-            die("Erreur d'insertion: " . $e->getMessage());
+            throw new Exception("Erreur d'insertion: " . $e->getMessage());
         }
     }
     
-
     public function getAllMedicaments() {
         try {
-            $query = "SELECT * FROM medicaments"; 
+            $query = "SELECT * FROM medicaments ORDER BY nom ASC"; 
             $stmt = $this->db->prepare($query);
             $stmt->execute();
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
             
-            if(empty($result)) {
-                throw new Exception("Aucun médicament trouvé dans la base de données");
-            }
-            
-            return $result;
         } catch(PDOException $e) {
             throw new Exception("Erreur de base de données: " . $e->getMessage());
         }
@@ -48,7 +43,6 @@ class Liste {
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC); // Retourne false si aucun résultat
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
-?>

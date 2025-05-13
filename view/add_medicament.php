@@ -151,6 +151,21 @@ session_start();
                 font-size: 24px;
             }
         }
+
+        .custom-file-input {
+            padding: 10px;
+            border: 2px solid #28a745;
+            background-color: #f8f9fa;
+            color: #000;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .custom-file-input:hover {
+            background-color:rgb(0, 0, 0);
+        }
+
+
     </style>
 </head>
 <body>
@@ -164,7 +179,7 @@ session_start();
             <?php unset($_SESSION['error']); ?>
         <?php endif; ?>
 
-        <form method="POST" action="../controller/AddMedicamentController.php">
+        <form method="POST" action="../controller/AddMedicamentController.php" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="nom">Nom du médicament:</label>
                 <input type="text" id="nom" name="nom" required value="<?= htmlspecialchars($_POST['nom'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
@@ -173,6 +188,17 @@ session_start();
             <div class="form-group">
                 <label for="description">Description:</label>
                 <textarea id="description" name="description" rows="4"><?= htmlspecialchars($_POST['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="prix">Prix (en €):</label>
+                <input type="number" id="prix" name="prix" min="0" step="0.01" required value="<?= htmlspecialchars($_POST['prix'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+            </div>
+            
+            <div class="form-group">
+                <label for="photo">Photo:</label>
+                <input type="file" id="photo" name="photo" class="custom-file-input" accept="image/*" >
+                <small>Formats acceptés: JPG, PNG, GIF (max 2MB)</small>
             </div>
             
             <button type="submit">Ajouter le médicament</button>

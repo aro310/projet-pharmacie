@@ -232,7 +232,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Nom</th>
-                        <th>Description</th>
+                        <th>Prix</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -248,7 +248,7 @@
                             <tr>
                                 <td><?php echo htmlspecialchars($medicament['id'] ?? ''); ?></td>
                                 <td><?php echo htmlspecialchars($medicament['nom'] ?? ''); ?></td>
-                                <td><?php echo htmlspecialchars($medicament['description'] ?? ''); ?></td>
+                                <td><?php echo htmlspecialchars($medicament['prix'] ?? ''); ?>&nbsp;€</td>
                                 <td>
                                 <form action="DetailMedicamentController.php" method="get">
                                     <input type="hidden" name="id" value="<?= htmlspecialchars($medicament['id']) ?>">
