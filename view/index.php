@@ -36,7 +36,7 @@ session_start();
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="http://localhost/Pharmacie/controller/ListesController.php" id="showMedicaments">
+                            <a class="nav-link" href="../controller/ListesController.php" id="showMedicaments">
                                 <i class="bi bi-capsule"></i> Médicaments
                             </a>
                         </li>

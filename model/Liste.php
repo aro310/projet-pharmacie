@@ -45,4 +45,25 @@ class Liste {
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    public function updateMedicament($id, $nom, $description, $prix, $photoPath) {
+        try {
+            $query = "UPDATE medicaments SET 
+                     nom = :nom, 
+                     description = :description, 
+                     prix = :prix, 
+                     photo = :photo 
+                     WHERE id = :id";
+            
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':nom', $nom);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':prix', $prix, PDO::PARAM_STR);
+            $stmt->bindParam(':photo', $photoPath);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            
+            return $stmt->execute();
+        } catch(PDOException $e) {
+            throw new Exception("Erreur de mise à jour: " . $e->getMessage());
+        }
+    }
 }

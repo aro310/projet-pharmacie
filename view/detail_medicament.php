@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détails Médicament #<?= $medicament['id'] ?></title>
     <link rel="stylesheet" href="../public/css/detail.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 </head>
 <body>
     <div class="card">
@@ -25,7 +26,7 @@
             <div class="detail-row">
                 <div class="detail-label">Prix:</div>
                 <div class="detail-value">
-                    <span class="price-tag"><?= number_format($medicament['prix'], 2) ?> €</span>
+                    <span class="price-tag"><?= number_format($medicament['prix'], 2) ?> Ar</span>
                 </div>
             </div>
             
@@ -38,8 +39,13 @@
                 </div>
             <?php endif; ?>
             
-            <div style="text-align: center;">
-                <a href="ListesController.php" class="btn">Retour à la liste</a>
+            <div class="action-buttons">
+                <a href="ListesController.php" class="btn">
+                    <i class="bi bi-arrow-left"></i> Retour
+                </a>
+                <a href="EditMedicamentController.php?id=<?= $medicament['id'] ?>" class="btn btn-edit">
+                    <i class="bi bi-pencil-square"></i> Modifier
+                </a>
             </div>
         </div>
     </div>

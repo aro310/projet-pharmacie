@@ -4,6 +4,8 @@
     --pharma-purple: #9966cc;
     --bg-dark: #0a0a1a;
     --text-light: #ffffff;
+    --error-color: #ff4d4d;
+    --edit-color: #ffcc00;
 }
 
 body {
@@ -85,4 +87,107 @@ body {
     font-size: 24px;
     color: var(--pharma-green);
     font-weight: bold;
+}
+
+.edit-form input,
+.edit-form textarea,
+.edit-form select {
+    width: 100%;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--pharma-purple);
+    border-radius: 4px;
+    color: var(--text-light);
+}
+
+.edit-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.current-photo {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.current-photo img {
+    max-width: 200px;
+    border: 1px solid var(--pharma-blue);
+    border-radius: 4px;
+}
+
+.current-photo span {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: var(--pharma-purple);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-edit {
+    background: linear-gradient(135deg, var(--edit-color), #ff9900);
+}
+
+.btn-cancel {
+    background: linear-gradient(135deg, var(--pharma-purple), #cc66ff);
+}
+
+.error-message {
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: rgba(255, 77, 77, 0.2);
+    border-left: 3px solid var(--error-color);
+    border-radius: 0 4px 4px 0;
+}
+
+/* Animation pour les boutons */
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 255, 153, 0.3);
+    filter: brightness(1.1);
+}
+
+/* Gestion des photos */
+.photo-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-replace, .btn-remove {
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: all 0.3s;
+}
+
+.btn-replace {
+    background-color: rgba(51, 153, 255, 0.2);
+    border: 1px solid var(--pharma-blue);
+    color: var(--pharma-blue);
+}
+
+.btn-remove {
+    background-color: rgba(255, 77, 77, 0.2);
+    border: 1px solid var(--error-color);
+    color: var(--error-color);
+}
+
+.btn-replace:hover, .btn-remove:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.current-photo img {
+    max-width: 200px;
+    max-height: 200px;
+    border: 2px dashed var(--pharma-purple);
+    padding: 5px;
+    background: rgba(0,0,0,0.3);
 }

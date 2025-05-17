@@ -33,7 +33,7 @@ session_start();
             </div>
             
             <div class="form-group">
-                <label for="prix">Prix (en €):</label>
+                <label for="prix">Prix (en Ar):</label>
                 <input type="number" id="prix" name="prix" min="0" step="0.01" required value="<?= htmlspecialchars($_POST['prix'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
             </div>
             

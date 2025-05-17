@@ -39,3 +39,11 @@ Stack trace:
 [13-May-2025 15:08:37 Europe/Berlin] PHP Warning:  Undefined variable $id in C:\xampp\htdocs\Pharmacie\view\medocs.php on line 254
 [13-May-2025 18:53:10 Europe/Berlin] Seuls les fichiers JPEG, PNG et GIF sont autorisés
 [13-May-2025 18:54:04 Europe/Berlin] Seuls les fichiers JPEG, PNG et GIF sont autorisés
+[17-May-2025 22:17:25 Europe/Berlin] PHP Warning:  Undefined array key "description" in C:\xampp\htdocs\Pharmacie\controller\EditMedicamentController.php on line 30
+[17-May-2025 22:17:25 Europe/Berlin] PHP Warning:  Undefined array key "prix" in C:\xampp\htdocs\Pharmacie\controller\EditMedicamentController.php on line 31
+[17-May-2025 22:17:45 Europe/Berlin] PHP Warning:  Undefined array key "description" in C:\xampp\htdocs\Pharmacie\controller\EditMedicamentController.php on line 30
+[17-May-2025 22:17:45 Europe/Berlin] PHP Warning:  Undefined array key "prix" in C:\xampp\htdocs\Pharmacie\controller\EditMedicamentController.php on line 31
+[17-May-2025 22:18:35 Europe/Berlin] PHP Warning:  Undefined array key "description" in C:\xampp\htdocs\Pharmacie\controller\EditMedicamentController.php on line 30
+[17-May-2025 22:18:35 Europe/Berlin] PHP Warning:  Undefined array key "prix" in C:\xampp\htdocs\Pharmacie\controller\EditMedicamentController.php on line 31
+[17-May-2025 22:18:43 Europe/Berlin] PHP Warning:  Undefined array key "description" in C:\xampp\htdocs\Pharmacie\controller\EditMedicamentController.php on line 30
+[17-May-2025 22:18:43 Europe/Berlin] PHP Warning:  Undefined array key "prix" in C:\xampp\htdocs\Pharmacie\controller\EditMedicamentController.php on line 31

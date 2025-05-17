@@ -31,12 +31,11 @@
             <table class="medicament-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Nom</th>
                         <th>Prix</th>
                         <th>Actions</th>
                     </tr>
-                </thead>
+                </thead>%
                 <tbody>
                 <?php
                     if (!isset($medicaments)) {
@@ -47,16 +46,25 @@
                     <?php if(!empty($medicaments)): ?>
                         <?php foreach ($medicaments as $medicament): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($medicament['id'] ?? ''); ?></td>
                                 <td><?php echo htmlspecialchars($medicament['nom'] ?? ''); ?></td>
-                                <td><?php echo htmlspecialchars($medicament['prix'] ?? ''); ?>&nbsp;€</td>
+                                <td><?php echo htmlspecialchars($medicament['prix'] ?? ''); ?>&nbsp;Ar</td>
                                 <td>
-                                <form action="DetailMedicamentController.php" method="get">
-                                    <input type="hidden" name="id" value="<?= htmlspecialchars($medicament['id']) ?>">
-                                    <button type="submit" class="btn-neon btn-sm">
-                                        <i class="bi bi-pencil-square"></i> Détail
-                                    </button>
-                                </form>
+                                    <div class="d-flex gap-2">
+                                        <form action="DetailMedicamentController.php" method="get" class="me-2">
+                                            <input type="hidden" name="id" value="<?= htmlspecialchars($medicament['id']) ?>">
+                                            <button type="submit" class="btn-neon btn-sm">
+                                                <i class="bi bi-pencil-square"></i> Détail
+                                            </button>
+                                        </form>
+                                        
+                                        <form action="../controller/DeleteMedicamentController.php" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce médicament?');">
+                                            <input type="hidden" name="id" value="<?= htmlspecialchars($medicament['id']) ?>">
+                                            <button type="submit" class="btn-neon btn-sm">
+                                                <i class="bi bi-trash"></i> Supprimer
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

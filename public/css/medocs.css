@@ -84,6 +84,7 @@ body {
     margin-bottom: 2rem;
 }
 
+
 .medicament-table thead {
     background: linear-gradient(135deg, rgba(51, 153, 255, 0.3), rgba(0, 255, 153, 0.2));
     border-bottom: 2px solid var(--pharma-blue);
@@ -195,3 +196,4 @@ body {
         font-size: 1.8rem;
     }
 }
+
