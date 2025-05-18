@@ -2,8 +2,7 @@
 require_once "../config/database.php";
 require_once "../model/Medicament.php";
 
-// Très important : pas de "echo" avant le JSON
-header('Content-Type: application/json'); // Optionnel mais recommandé
+header('Content-Type: application/json'); 
 
 if (isset($_GET['search'])) {
     $database = new Database();
@@ -13,6 +12,5 @@ if (isset($_GET['search'])) {
     $resultats = $med->rechercher($_GET['search']);
 
     echo json_encode($resultats);
-    // ⚠️ Ne rien écrire ici après echo json_encode()
 }
 

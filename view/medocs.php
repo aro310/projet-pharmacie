@@ -33,9 +33,9 @@
                     <tr>
                         <th>Nom</th>
                         <th>Prix</th>
-                        <th>Actions</th>
+                        <th >Actions</th>
                     </tr>
-                </thead>%
+                </thead>
                 <tbody>
                 <?php
                     if (!isset($medicaments)) {

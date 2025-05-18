@@ -195,3 +195,25 @@ body {
         padding: 1.5rem;
     }
 }
+
+/* Style pour le bouton d'inscription */
+.btn-outline-pharma {
+    color: var(--pharma-blue);
+    border-color: var(--pharma-blue);
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-outline-pharma:hover {
+    background-color: var(--pharma-blue);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(51, 153, 255, 0.2);
+}
+
+.register-link {
+    padding-top: 15px;
+    border-top: 1px solid rgba(153, 102, 204, 0.2);
+}

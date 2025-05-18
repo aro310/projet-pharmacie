@@ -6,7 +6,7 @@ require_once '../model/User.php';      // contient la classe User
 
 // Créer une instance de connexion à la base de données
 $db = new Database();
-$pdo = $db->getConnection(); // très important !
+$pdo = $db->getConnection(); 
 
 $stmt = $pdo->query("SELECT id, password FROM users");
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
