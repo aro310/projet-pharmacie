@@ -1,7 +1,3 @@
-<?php
-// Début du fichier - absolument RIEN avant cette ligne
-session_start();
-?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>

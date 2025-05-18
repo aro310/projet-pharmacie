@@ -1,10 +1,3 @@
-<?php
-session_start();
-/*if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
-    exit;
-}*/
-?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -165,7 +158,7 @@ session_start();
                                     <div class="med-name">${med.nom}</div>
                                     <div class="med-desc">${med.description || 'Aucune description'}</div>
                                     <div class="small text-muted mt-1">
-                                        Prix: ${med.prix} € - Stock: ${med.stock}
+                                        Prix: ${med.prix} Ar
                                     </div>
                                 </div>
                             `);
