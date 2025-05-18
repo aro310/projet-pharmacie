@@ -34,8 +34,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="bi bi-people"></i> Clients
+                            <a class="nav-link" href="../controller/UsersController.php">
+                                <i class="bi bi-people"></i> Utilisateurs 
                             </a>
                         </li>
                         <li class="nav-item">

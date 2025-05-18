@@ -38,4 +38,13 @@ class User {
         $stmt = $this->conn->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
         return $stmt->execute([$username, $hashed, $role]);
     }
+    public function getAllUsers() {
+        $stmt = $this->conn->query("SELECT * FROM users ORDER BY created_at DESC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function deleteUser($id) {
+        $stmt = $this->conn->prepare("DELETE FROM users WHERE id = ?");
+        return $stmt->execute([$id]);
+    }
 }
